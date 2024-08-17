@@ -1,9 +1,15 @@
 <?php
 
-namespace Hellm\ToxicMvc\Base\Router;
+namespace Hellm\ToxicMvc\core\Router;
 
-class BaseRouter
+use Hellm\ToxicMvc\core\Router\Exception\RouterException;
+use Hellm\ToxicMvc\core\Router\Interface\RouterInterface;
+use Hellm\ToxicMvc\core\Router\Trait\RouterHelperTrait;
+
+class Router implements RouterInterface
 {
+    use RouterHelperTrait;
+
     private array $routes = [];
     private string $url_path;
     private string $base_url;
@@ -14,25 +20,28 @@ class BaseRouter
         $this->url_path = parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH);
     }
 
-    public function add(string $http_method, string $url_path, array $controller): void
+    public function add(string $http_method, string $url_path, array $controller, string $regex = "\d+"): void
     {
         $path = $this->normalizePath($url_path);
         $this->routes[] = [
             'path' => $path,
             'method' => strtoupper($http_method),
             'controller' => $controller,
+            "regex" => $regex,
             'dispatched' => false
         ];
     }
+
 
     public function dispatch(): void
     {
         $path = $this->normalizePath($this->url_path);
 
         $method = strtoupper($_SERVER["REQUEST_METHOD"]);
+
         foreach ($this->routes as $route) {
 
-            $pattern = preg_replace('#\{(\w+)\}#', '(?<$1>[^/]+)', $route['path']);
+            $pattern = preg_replace('#\{(\w+)\}#', '(?<$1>' . $route["regex"] . ')', $route['path']);
             $pattern = "#^{$pattern}/?$#";
 
             if (!preg_match($pattern, $path,  $match) || $route['method'] != $method) {
@@ -49,48 +58,21 @@ class BaseRouter
                 $route["dispatched"] = true;
                 return;
             } catch (\Throwable $th) {
-                throw $th;
-                $this->returnBadRequest($th->getMessage(), 500);
+                throw new RouterException($th->getMessage(), 500);
                 return;
             }
         }
-        $this->returnBadRequest("Not Found", 404);
+        throw new RouterException("Page not found", 404);
     }
 
-    private function normalizePath(string $url_path): string
+
+    /**
+     * Get all the routes in the router
+     *
+     * @return array
+     */
+    public function getRoutes(): array
     {
-        $this->formatQueryString($url_path);
-
-        $url_path = str_replace($this->base_url, "", $url_path);
-
-        $url_path = trim($url_path, "/");
-        $url_path = "/{$url_path}/";
-        $url_path = preg_replace("#[/]{2,}#", '/', $url_path);
-
-        return $url_path;
-    }
-
-    protected function formatQueryString($url)
-    {
-        if ($url != '') {
-            $parts = explode('&', $url, 2);
-
-            if (strpos($parts[0], '=') === false) {
-                $url = $parts[0];
-            } else {
-                $url = '';
-            }
-        }
-
-        return rtrim($url, '/');
-    }
-
-    private function returnBadRequest(string $message, int $code): void
-    {
-        http_response_code($code);
-        // $logger = new Logger();
-        // $logger->message = $message;
-        // $logger->created_at = date("Y-m-d", time());
-        // $logger->save();
+        return $this->routes;
     }
 }
