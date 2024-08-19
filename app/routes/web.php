@@ -5,7 +5,7 @@ namespace Hellm\ToxicMvc\routes;
 use Hellm\ToxicMvc\Http\Request;
 use Hellm\ToxicMvc\Http\Response;
 use Hellm\ToxicMvc\Router\Router;
-use App\http\controller\TestController;
+use App\Http\Controller\TestController;
 use Hellm\ToxicMvc\Router\Facade\Route;
 
 $request = new Request();
