@@ -1,6 +1,8 @@
 <?php
 
-namespace Hellm\ToxicMvc\core\Router\Interface;
+namespace Hellm\ToxicMvc\Router\Interface;
+
+use Closure;
 
 interface RouterInterface
 {
@@ -21,4 +23,13 @@ interface RouterInterface
      * @return void
      */
     public function dispatch(): void;
+
+    /**
+     * Resolve the callback of a registered route
+     * @param array|string|Closure $callback
+     * @param array $params
+     * 
+     * @return mixed
+     */
+    public function resolve(array|string|Closure $callback, array $params = []): mixed;
 }

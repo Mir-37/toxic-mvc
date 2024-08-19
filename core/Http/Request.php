@@ -1,6 +1,6 @@
 <?php
 
-namespace Hellm\ToxicMvc\core\Http;
+namespace Hellm\ToxicMvc\Http;
 
 class Request
 {

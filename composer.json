@@ -1,18 +1,21 @@
 {
-    "name": "hellm/toxic-mvc",
-    "description": "A mvc framework so toxic that it will make you forget your ex. Made in pure php.",
-    "type": "library",
-    "license": "MIT",
-    "autoload": {
-        "psr-4": {
-            "Hellm\\ToxicMvc\\": "app/"
-        }
-    },
-    "authors": [
-        {
-            "name": "Mir-37",
-            "email": "mirmutasim37@gmail.com"
-        }
-    ],
-    "require": {}
+	"name": "hellm/toxic-mvc",
+	"description": "A mvc framework so toxic that it will make you forget your ex. Made in pure php.",
+	"type": "library",
+	"license": "MIT",
+	"autoload": {
+		"psr-4": {
+			"Hellm\\ToxicMvc\\": "core/",
+			"App\\": "app/"
+		}
+	},
+	"authors": [
+		{
+			"name": "Mir-37",
+			"email": "mirmutasim37@gmail.com"
+		}
+	],
+	"require": {
+		"symfony/console": "^6.4"
+	}
 }

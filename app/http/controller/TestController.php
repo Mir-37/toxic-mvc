@@ -1,6 +1,6 @@
 <?php
 
-namespace Hellm\ToxicMvc\http\controller;
+namespace App\http\controller;
 
 class TestController
 {

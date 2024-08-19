@@ -4,15 +4,15 @@ namespace Hellm\ToxicMvc\core\Router\Exception;
 
 use Exception;
 
-class RouterException
+class RouterException extends Exception
 {
-    private string $message;
-    private int $code;
+    protected $message;
+    protected $code;
 
     public function __construct(string $message, int $code)
     {
-        throw new Exception($message, $code);
-
+        $this->message = $message;
+        $this->code = $code;
         // $logger = new Logger();
         // $logger->message = $message;
         // $logger->created_at = date("Y-m-d", time());
