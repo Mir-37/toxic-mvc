@@ -1,0 +1,9 @@
+#!/usr/bin/env php
+
+<?php
+
+use Hellm\ToxicMvc\Console\Console;
+
+require "vendor/autoload.php";
+
+$console = new Console();
